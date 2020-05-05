@@ -1,5 +1,5 @@
 /*
-Ej. 16: Dadas las notas de los alumnos que rindieron un examen final,
+Ej. 16. Dadas las notas de los alumnos que rindieron un examen final,
 calcular e informar el porcentaje de notas superiores a 6.
 Con una nota negativa se indica el fin de ingreso de datos.
 
