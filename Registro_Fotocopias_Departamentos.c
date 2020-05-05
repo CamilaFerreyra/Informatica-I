@@ -39,10 +39,10 @@ main(){
         depto=getchar();
         while(depto!='@'){
 
-            printf("Ingrese la cantidad de copias simple faz (depto %c): ",depto);
-            scanf("%i", simples);
             printf("Ingrese la cantidad de copias doble faz(depto %c): ",depto);
             scanf("%i", dobles);
+            printf("Ingrese la cantidad de copias simple faz (depto %c): ",depto);
+            scanf("%i", simples);
 
             switch (depto){
             case 'M':
@@ -62,10 +62,10 @@ main(){
 
             default:
             printf("ERROR. Por favor ingrese M, F o R.");
+            }
 
             printf("Ingrese el departamento que realiza copias: ");
-            scanf("%c", depto);
-            }
+            depto=getchar();
 
         }
 
