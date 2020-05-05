@@ -50,21 +50,31 @@ main(){
     total_fotocopias_dia=0;
     hojas_dia=0;
 
+    M_total_mes=0;
+    F_total_mes=0;
+    R_total_mes=0;
+
+    hojas_mes=0;
+
+
+
+
     while(i<=20){
 
         printf("\n\tDia %i:",i);
-        getchar(); /// borro el buffer del teclado.
+        //getchar(); /// borro el buffer del teclado.
 
         printf("\n\tIngrese el departamento que realiza las fotocopias: ");
-        scanf("%c", &depto);
+        scanf(" %c", &depto);
 
         while(depto!='@'){
 
-            printf("\n\tIngrese la cantidad de copias doble faz(depto %c): ",depto);
+            printf("\n\tIngrese la cantidad de copias doble faz (depto %c): ",depto);
             scanf("%i", &dobles);
             printf("\n\tIngrese la cantidad de copias simple faz (depto %c): ",depto);
             scanf("%i", &simples);
-            getchar();              ///Borro buffer del teclado.
+            // getchar();              ///Borro buffer del teclado.
+            printf("\n\tPresione cualquier tecla para continuar...");
             getch();                ///Cosas amigables al usuario (:
             system("cls");
 
@@ -89,7 +99,7 @@ main(){
             }
 
             printf("\n\tIngrese el departamento que realiza copias: ");
-            scanf("%c", &depto);
+            scanf(" %c", &depto);
         }
 
         printf("\n\tUsted ha terminado de ingresar las copias del dia %i.\n\n\tEstos son los datos del dia %i:",i,i);
