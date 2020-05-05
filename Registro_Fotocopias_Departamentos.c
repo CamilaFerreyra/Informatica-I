@@ -32,17 +32,41 @@ main(){
     int  M_total_mes, F_total_mes, R_total_mes, hojas_mes, total_fotocopias_dia, max, dia;
     char depto;
     i=1;
+
+    M_simples=0;
+    F_simples=0;
+    R_simples=0;
+
+    M_dobles=0;
+    F_dobles=0;
+    R_dobles=0;
+
+    M_total_dia=0;
+    F_total_dia=0;
+    R_total_dia=0;
+
+    total_simples_dia=0;
+    total_dobles_dia=0;
+    total_fotocopias_dia=0;
+    hojas_dia=0;
+
     while(i<=20){
 
-        printf("Ingrese el departamento que realiza las fotocopias: ");
-        //scanf("%c", depto);
-        depto=getchar();
+        printf("\n\tDia %i:",i);
+        getchar(); /// borro el buffer del teclado.
+
+        printf("\n\tIngrese el departamento que realiza las fotocopias: ");
+        scanf("%c", &depto);
+
         while(depto!='@'){
 
-            printf("Ingrese la cantidad de copias doble faz(depto %c): ",depto);
-            scanf("%i", dobles);
-            printf("Ingrese la cantidad de copias simple faz (depto %c): ",depto);
-            scanf("%i", simples);
+            printf("\n\tIngrese la cantidad de copias doble faz(depto %c): ",depto);
+            scanf("%i", &dobles);
+            printf("\n\tIngrese la cantidad de copias simple faz (depto %c): ",depto);
+            scanf("%i", &simples);
+            getchar();              ///Borro buffer del teclado.
+            getch();                ///Cosas amigables al usuario (:
+            system("cls");
 
             switch (depto){
             case 'M':
@@ -61,15 +85,14 @@ main(){
             break;
 
             default:
-            printf("ERROR. Por favor ingrese M, F o R.");
+            printf("\n\tERROR. Por favor ingrese M, F o R.");
             }
 
-            printf("Ingrese el departamento que realiza copias: ");
-            depto=getchar();
-
+            printf("\n\tIngrese el departamento que realiza copias: ");
+            scanf("%c", &depto);
         }
 
-        printf("\n\tUsted ha terminado de ingresar las copias del dia %i.\n\n\tEstos son los datos del dia %i:",i);
+        printf("\n\tUsted ha terminado de ingresar las copias del dia %i.\n\n\tEstos son los datos del dia %i:",i,i);
 
         M_total_dia= 2*M_dobles+M_simples;
         F_total_dia= 2*F_dobles+F_simples;
@@ -85,7 +108,11 @@ main(){
 
         printf("\n\tTotal de fotocopias simple faz realizadas: %i",total_simples_dia);
         printf("\n\tTotal de fotocopias doble faz realizadas: %i",total_dobles_dia);
-        printf("\n\tLa cantidad de hojas utilizadas en el día es: %i hojas", hojas_dia);
+        printf("\n\tLa cantidad de hojas utilizadas en el dia es: %i hojas", hojas_dia);
+
+        printf("\n\tPresione cualquier tecla para continuar...");
+        getch();                                                 ///Cosas amigables al usuario (:
+        system("cls");
 
         /// Preparo datos para el mes:
 
@@ -95,6 +122,7 @@ main(){
 
         hojas_mes+= hojas_dia;
 
+        ///DIA CON MAXIMA CANTIDAD DE FOTOCOPIAS
         total_fotocopias_dia= 2*total_dobles_dia + total_simples_dia;
         if(i==1){
             max= total_fotocopias_dia;
@@ -126,6 +154,7 @@ main(){
         hojas_dia=0;
 
         i++;
+
     }
 
     printf("\n\tHa finalizado el mes. Estos son los datos del mes: ");
