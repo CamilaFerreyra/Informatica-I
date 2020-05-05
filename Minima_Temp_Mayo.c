@@ -1,5 +1,5 @@
 /*
-Ej.12. Dadas las 31 temperaturas mínimas de cada día del mes de mayo que se ingresan por teclado,
+Ej.12: Dadas las 31 temperaturas mínimas de cada día del mes de mayo que se ingresan por teclado,
 determinar e informar por pantalla en qué día se produjo la menor temperatura y cuál fue ese valor
 
 PSEUDOCÓDIGO:
