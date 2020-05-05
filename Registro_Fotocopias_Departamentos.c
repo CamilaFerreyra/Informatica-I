@@ -34,14 +34,14 @@ main(){
     i=1;
     while(i<=20){
 
-        prinf("Ingrese el departamento que realiza las fotocopias: ");
-        scanf("%c", depto);
+        printf("Ingrese el departamento que realiza las fotocopias: ");
+        //scanf("%c", depto);
+        depto=getchar();
+        while(depto!='@'){
 
-        while(depto!="@"){
-
-            printf("Ingrese la cantidad de copias simple faz: ");
+            printf("Ingrese la cantidad de copias simple faz (depto %c): ",depto);
             scanf("%i", simples);
-            printf("Ingrese la cantidad de copias doble faz: ");
+            printf("Ingrese la cantidad de copias doble faz(depto %c): ",depto);
             scanf("%i", dobles);
 
             switch (depto){
@@ -50,12 +50,12 @@ main(){
             M_dobles+= dobles;
             break;
 
-            case "F":
+            case 'F':
             F_simples+= simples;
             F_dobles+= dobles;
             break;
 
-            case "R":
+            case 'R':
             R_simples+= simples;
             R_dobles+= dobles;
             break;
@@ -63,8 +63,9 @@ main(){
             default:
             printf("ERROR. Por favor ingrese M, F o R.");
 
-            prinf("Ingrese el departamento que realiza copias: ");
+            printf("Ingrese el departamento que realiza copias: ");
             scanf("%c", depto);
+            }
 
         }
 
@@ -74,9 +75,9 @@ main(){
         F_total_dia= 2*F_dobles+F_simples;
         R_total_dia= 2*R_dobles+R_simples;
 
-        printf("\n\tTotal de fotocopias realizadas por el departamento de Matematica: %i",total_M);
-        printf("\n\tTotal de fotocopias realizadas por el departamento de Fisica: %i",total_F);
-        printf("\n\tTotal de fotocopias realizadas por el departamento de Sist. de Representacion: %i",total_R);
+        printf("\n\tTotal de fotocopias realizadas por el departamento de Matematica: %i",M_total_dia);
+        printf("\n\tTotal de fotocopias realizadas por el departamento de Fisica: %i",F_total_dia);
+        printf("\n\tTotal de fotocopias realizadas por el departamento de Sist. de Representacion: %i",R_total_dia);
 
         total_simples_dia= M_simples + F_simples + R_simples;
         total_dobles_dia= M_dobles + F_dobles + R_dobles;
@@ -86,7 +87,7 @@ main(){
         printf("\n\tTotal de fotocopias doble faz realizadas: %i",total_dobles_dia);
         printf("\n\tLa cantidad de hojas utilizadas en el día es: %i hojas", hojas_dia);
 
-        // Preparo datos para el mes:
+        /// Preparo datos para el mes:
 
         M_total_mes+= M_total_dia;
         F_total_mes+= F_total_dia;
@@ -105,7 +106,7 @@ main(){
             }
         }
 
-        // Reinicio contadores para el sig dia:
+        /// Reinicio contadores para el sig dia:
 
         M_simples=0;
         F_simples=0;
@@ -129,14 +130,15 @@ main(){
 
     printf("\n\tHa finalizado el mes. Estos son los datos del mes: ");
 
-    print("\n\tTotal de fotocopias realizadas en el mes por departamento:");
-    print("\n\tMatematica: %i", M_total_mes);
+    printf("\n\tTotal de fotocopias realizadas en el mes por departamento:");
+    printf("\n\tMatematica: %i", M_total_mes);
     printf("\n\tFisica: %i", F_total_mes);
-    prinf("\n\tSistemas de Representacion: %i", R_total_mes);
+    printf("\n\tSistemas de Representacion: %i", R_total_mes);
 
     printf("\n\tLa cantidad de hojas utilizadas en el mes: %i", hojas_mes);
 
     printf("\n\tEl dia %i del mes se realizaron %i fotocopias, siendo el dia donde mas fotocopias se realizaron.", dia, max);
+
 
     return 0;
 }
