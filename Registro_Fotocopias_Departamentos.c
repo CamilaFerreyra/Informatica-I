@@ -22,6 +22,122 @@ Al finalizar los 20 días laborables , se deberá informar:
 un departamento con el mismo valor máximo.
 */
 
+
+/*
+    PSEUDOCODIGO
+
+    Algoritmo: Registro_Fotocopias_Departamentos
+    Variables
+        Enteros: M_simples, F_simples, R_simples, M_dobles, F_dobles, R_dobles, simples, dobles, i,
+                M_total_dia, F_total_dia, R_total_dia, total_simples_dia, total_dobles_dia, hojas_dia,
+                M_total_mes, F_total_mes, R_total_mes, hojas_mes, total_fotocopias_dia, max, dia
+        Caracter: depto
+    Inicio
+        i <- 1
+
+        M_total_mes <- 0
+        F_total_mes <- 0
+        R_total_mes <- 0
+
+        hojas_mes <- 0
+        
+        Repetir Mientras (i<=20) hacer
+
+            M_simples <-0
+            F_simples <- 0
+            R_simples <- 0
+
+            M_dobles <- 0
+            F_dobles <- 0
+            R_dobles <- 0
+
+            M_total_dia <- 0
+            F_total_dia <- 0
+            R_total_dia <- 0
+
+            total_simples_dia <- 0
+            total_dobles_dia <- 0
+            total_fotocopias_dia <- 0
+            hojas_dia <- 0
+
+            Escribir("Dia ", i)
+            Escribir("Ingrese el departamento que realiza las fotocopias: ")
+            Leer (depto)
+            Repetir Mientras (depto <> "@") hacer
+                Escribir("Ingrese la cantidad de copias doble faz")
+                Leer(dobles)
+                Escribir("Ingrese la cantidad de copias simple faz")
+                Leer(simples)
+
+                Segun Sea (depto)
+                    'M': M_simples <- M_simples + simples 
+                         M_dobles <- M_dobles + dobles
+                    'F': F_simples <- F_simples + simples 
+                         F_dobles <- F_dobles + dobles
+                    'R': R_simples <- R_simples + simples 
+                         R_dobles <- R_dobles + dobles
+                Sino
+                    Escribir("ERROR. Por favor ingrese M, F o R.")
+                Fin Segun
+
+                Escribir("Ingrese el departamento que realiza copias: ")
+                Leer(depto)
+            Fin Mientras
+            Escribir("Usted ha terminado de ingresar las copias del dia",i)
+            Escribir("Estos son los datos del dia",i)
+
+            M_total_dia <- 2*M_dobles + M_simples
+            F_total_dia <- 2*F_dobles + F_simples
+            R_total_dia <- 2*R_dobles + R_simples
+
+            Escribir("Total de fotocopias realizadas por el departamento de Matematica: ",M_total_dia)
+            Escribir("Total de fotocopias realizadas por el departamento de Fisica: ",F_total_dia)
+            Escribir("Total de fotocopias realizadas por el departamento de Sist. de Representacion: ",R_total_dia)
+
+            total_simples_dia <- M_simples + F_simples + R_simples
+            total_dobles_dia <- M_dobles + F_dobles + R_dobles
+            hojas_dia <- total_dobles_dia + total_simples_dia
+
+            Escribir("Total de fotocopias simple faz realizadas: ",total_simples_dia)
+            Escribir("Total de fotocopias doble faz realizadas: ",2*total_dobles_dia)
+            Escribir("La cantidad de hojas utilizadas en el dia es: ", hojas_dia, "hojas")
+
+            M_total_mes <- M_total_mes + M_total_dia
+            F_total_mes <- F_total_mes + F_total_dia
+            R_total_mes <- R_total_mes + R_total_dia
+
+            hojas_mes <- hojas_mes + hojas_dia
+
+           total_fotocopias_dia <- 2*total_dobles_dia + total_simples_dia
+
+            Si(i=1) Entonces
+                max <- total_fotocopias_dia
+                dia <- i
+            Sino
+                Si(max<total_fotocopias_dia) Entonces
+                max <- total_fotocopias_dia
+                dia <- i
+                Fin Si
+            Fin Si
+            
+            i++;
+
+        Fin Mientras
+
+        Escribir("Ha finalizado el mes. Estos son los datos del mes:")
+
+        Escribir("Total de fotocopias realizadas en el mes por departamento:")
+        Escribir("Matematica: ", M_total_mes)
+        Escribir("Fisica: ", F_total_mes)
+        Escribir("Sistemas de Representacion: ", R_total_mes)
+
+        Escribir("La cantidad de hojas utilizadas en el mes: ", hojas_mes)
+
+        Escribir("El dia", dia, "del mes se realizaron", max,"fotocopias, siendo el dia donde mas fotocopias se realizaron.")
+
+    Fin
+
+*/
 #include<stdio.h>
 //#include<stdlib.h>
 //#include<conio.h>
@@ -31,38 +147,36 @@ main(){
     int M_total_dia, F_total_dia, R_total_dia, total_simples_dia, total_dobles_dia, hojas_dia;
     int  M_total_mes, F_total_mes, R_total_mes, hojas_mes, total_fotocopias_dia, max, dia;
     char depto;
+
     i=1;
-
-    M_simples=0;
-    F_simples=0;
-    R_simples=0;
-
-    M_dobles=0;
-    F_dobles=0;
-    R_dobles=0;
-
-    M_total_dia=0;
-    F_total_dia=0;
-    R_total_dia=0;
-
-    total_simples_dia=0;
-    total_dobles_dia=0;
-    total_fotocopias_dia=0;
-    hojas_dia=0;
-
+    /// Reinicio contadores para el mes:
     M_total_mes=0;
     F_total_mes=0;
     R_total_mes=0;
 
     hojas_mes=0;
 
-
-
-
     while(i<=20){
 
+        /// Reinicio contadores para el dia:
+        M_simples=0;
+        F_simples=0;
+        R_simples=0;
+
+        M_dobles=0;
+        F_dobles=0;
+        R_dobles=0;
+
+        M_total_dia=0;
+        F_total_dia=0;
+        R_total_dia=0;
+
+        total_simples_dia=0;
+        total_dobles_dia=0;
+        total_fotocopias_dia=0;
+        hojas_dia=0;
+
         printf("\n\tDia %i:",i);
-        //getchar(); /// borro el buffer del teclado.
 
         printf("\n\tIngrese el departamento que realiza las fotocopias: ");
         scanf(" %c", &depto);
@@ -73,7 +187,6 @@ main(){
             scanf("%i", &dobles);
             printf("\n\tIngrese la cantidad de copias simple faz (depto %c): ",depto);
             scanf("%i", &simples);
-            // getchar();              ///Borro buffer del teclado.
             printf("\n\tPresione cualquier tecla para continuar...");
             getch();                ///Cosas amigables al usuario (:
             system("cls");
@@ -114,10 +227,10 @@ main(){
 
         total_simples_dia= M_simples + F_simples + R_simples;
         total_dobles_dia= M_dobles + F_dobles + R_dobles;
-        hojas_dia= total_dobles_dia/2 + total_simples_dia;
+        hojas_dia= total_dobles_dia + total_simples_dia;
 
         printf("\n\tTotal de fotocopias simple faz realizadas: %i",total_simples_dia);
-        printf("\n\tTotal de fotocopias doble faz realizadas: %i",total_dobles_dia);
+        printf("\n\tTotal de fotocopias doble faz realizadas: %i",2*total_dobles_dia);
         printf("\n\tLa cantidad de hojas utilizadas en el dia es: %i hojas", hojas_dia);
 
         printf("\n\tPresione cualquier tecla para continuar...");
@@ -143,25 +256,6 @@ main(){
                 dia= i;
             }
         }
-
-        /// Reinicio contadores para el sig dia:
-
-        M_simples=0;
-        F_simples=0;
-        R_simples=0;
-
-        M_dobles=0;
-        F_dobles=0;
-        R_dobles=0;
-
-        M_total_dia=0;
-        F_total_dia=0;
-        R_total_dia=0;
-
-        total_simples_dia=0;
-        total_dobles_dia=0;
-        total_fotocopias_dia=0;
-        hojas_dia=0;
 
         i++;
 
