@@ -34,7 +34,7 @@ un departamento con el mismo valor máximo.
         Caracter: depto
     Inicio
         i <- 1
-
+        
         M_total_mes <- 0
         F_total_mes <- 0
         R_total_mes <- 0
