@@ -134,6 +134,7 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
     Muestra lista completa de examenes corregidos junto con la
     numero del alumno y nota del alumno. ---*/
     int i,c;
+    printf("\nListado alumnos corregidos:\n--------------------------\n");
     for(i=0;i<corregidos;i++){
         printf("\n\nAlumno numero %i:", examinados[i].numero);
         printf("\n\nExamen:");
@@ -142,7 +143,7 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
             if(c!=9)
             printf(",");
         }
-        printf("\n\nNota final: %.2f\n-----------------------\n",examinados[i].nota_final);
+        printf("\n\nNota final: %.2f\n--------------------------\n",examinados[i].nota_final);
     }
 }
 void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos){
@@ -206,7 +207,7 @@ void salir(struct examinado examinados[80], int *examenes_corregidos){
     printf("\n\nUsted ha finalizado el programa.");
     FILE *correcciones;
     correcciones= fopen("correcciones.txt", "w");
-    printf("\nGrenerando archivo con correcciones...");
+    printf("\n\nGrenerando archivo con correcciones...");
     for(i=0;i<*examenes_corregidos;i++){
         fprintf(correcciones,"%i", examinados[i].numero);
         for(c=0;c<10;c++){
@@ -214,10 +215,10 @@ void salir(struct examinado examinados[80], int *examenes_corregidos){
             if(c!=9)
             fprintf(correcciones,",");
         }
-        fprintf(correcciones,"%f", examinados[i].nota_final);
+        fprintf(correcciones," %.2f\n", examinados[i].nota_final);
     }
     fclose(correcciones);
-    printf("Archivo generado.");
+    printf("Archivo generado.\n\n");
 }
 
 main(){
@@ -229,8 +230,8 @@ main(){
     srand(time(NULL));
     cargar(alumnos, &inscriptos);
     printf("\nCantidad de alumnos inscriptos en la comision: %i", inscriptos);
-    opcion=menu();
     while(opcion!='S'){
+        opcion=menu();
         switch(opcion)
         {
             case 'E':
@@ -244,7 +245,6 @@ main(){
             case 'S':
                 salir(examinados, &alumnos_examinados);
         }
-        opcion=menu();
     }
     return 0;
 }
