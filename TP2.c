@@ -13,11 +13,12 @@ struct examinado{
     char mail[360];
     int examen[10];
     float nota_final;
-    int bandera;
 };
 void aleatorio(int exam[10]){
-    int i, j, alea, bandera;
+    /*--- SUBRUTINA, carga en un arreglo de tipo int,
+    10 numeros aleatorios entre 1 y 100 ---*/
 
+    int i, j, alea, bandera;
     exam[0] = rand()%100+1;
     for(i=1; i<10; i++){
         bandera=0;
@@ -37,6 +38,7 @@ void cargar(struct alumno planilla[80], int *inscriptos){
     El archivo de organización secuencial estudiantes.dat se compone de
     80 registros con dos campos, el primero es el número de estudiante
     y el segundo la dirección de correo electrónico. ---*/
+
     int i=0,id;
     char mail[360];
 
@@ -118,10 +120,9 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
             aleatorio(examinados[i].examen);
             printf("Examen generado.");
             examinados[i].nota_final=0.0;
-            examinados[i].bandera=1;
-    /// si bandera == 1, fue creado el examen para ese alumno.
+    /// si nota_final == 0.0, fue creado el examen para ese alumno.
             i++;
-    ///Inicializo en 0.0 la nota final de cada alumno al que se le asigno un examen.
+    
         }else{
             printf("\n\n%s no se encuentra inscripto en esta comision.", mail);
         }
@@ -131,8 +132,8 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
 }
 void mostrar_notas(struct examinado examinados[80], int corregidos){
     /*--- SUBRUTINA, recibe la lista de alumnos examinados y la cantidad de examenes corregidos.
-    Muestra lista completa de examenes corregidos junto con la
-    numero del alumno y nota del alumno. ---*/
+    Muestra la lista completa de examenes corregidos junto con el
+    numero de alumno y la nota final del mismo. ---*/
     int i,c;
     printf("\nListado alumnos corregidos:\n--------------------------\n");
     for(i=0;i<corregidos;i++){
@@ -145,6 +146,20 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
         }
         printf("\n\nNota final: %.2f\n--------------------------\n",examinados[i].nota_final);
     }
+}
+int verificar_correccion(struct examinado examinados[80], int total_examenes){
+    /*--- FUNCION, si todos los examenes fueron corregidos, 
+    devuelve 1, sino, devuelve 0.  ---*/ 
+    int respuesta=0, i;
+    for(i=0;i<total_examenes;i++){
+        if(examinados[i].nota_final!=0.0)
+            respuesta++;
+        if(respuesta==total_examenes)
+            respuesta=1;
+        else   
+            respuesta=0;
+    }
+    return respuesta;
 }
 void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos){
     /*--- SUBRUTINA, recibe la estructura creada por la opción E).
@@ -165,10 +180,10 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
     todos los exámenes corregidos indicando el nro de estudiante y la nota, y a continuación
     habilitar nuevamente la opción E) EXAMINAR.
     */
-    ///Si el examen fue creado y no fue corregido, bandera==1, nota final == 0.0
+    ///Si el examen fue creado y no fue corregido, nota final == 0.0
     int i,c;
     *corregidos=0;
-    if(examinados[0].bandera==1){
+    if(examinados[0].nota_final==0.0){
         for(i=0;i<*total_examenes;i++){
             if(examinados[i].nota_final==0.0){
                 printf("\n\nAlumno numero %i, aun sin corregir", examinados[i].numero);
@@ -189,20 +204,50 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
     }else{
         printf("\n\nADVERTENCIA: no se han generado los examenes!!");
     }
+///Si todos los examenes fueron corregidos, se enlista el examen, nro de alumno y nota.
+    if(verificar_correccion(examinados,*total_examenes)==1)
+        mostrar_notas(examinados, *corregidos);
+}
+void intercambio(struct examinado examinados[80], int a, int b){
+    /*--- SUBRUTINA, dada una estructura del tipo examinado,
+    intercmbia el elemento ubicado en la posicion "a" 
+    por el elemento ubicado en la posicion "b" ---*/
+    struct examinado aux;
+    int i;
+    ///aux<-a
+    aux.numero=examinados[a].numero;
+    strcpy(aux.mail,examinados[a].mail);
+    for(i=0;i<10;i++){
+        aux.examen[i]=examinados[a].examen[i];
+    }
+    aux.nota_final=examinados[a].nota_final;
+    ///a<-b
+    examinados[a].numero=examinados[b].numero;
+    strcpy(examinados[a].mail,examinados[b].mail);
+    for(i=0;i<10;i++){
+        examinados[a].examen[i]=examinados[b].examen[i];
+    }
+    examinados[a].nota_final,examinados[b].nota_final;
+    ///b<-aux
+    examinados[b].numero=aux.numero;
+    strcpy(examinados[b].mail,aux.mail);
+    for(i=0;i<10;i++){
+        examinados[b].examen[i]=aux.examen[i];
+    }
+    examinados[b].nota_final=aux.nota_final;
 }
 void ordenar_creciente(struct examinado examinados[80], int *examenes_corregidos){
-    /* --- SUBRUTINA, ordena a los alumnos examinados, en funcion a su calificacion,
-    de menor a mayor ---*/
+    /* --- SUBRUTINA, ordena a los alumnos examinados, segun su calificacion,
+    de menor a mayor. Algoritmo: bubble sort (mejorado) ---*/
 
 }
 void salir(struct examinado examinados[80], int *examenes_corregidos){
-    /*
-    Finaliza el programa.
-    Antes de salir:guardar en un archivo de nombre “correcciones.txt”
-    un listado que contenga los siguientes campos:
+    /*--- SUBRUTINA, guarda en un archivo de nombre “correcciones.txt”
+    un listado que con los siguientes campos:
     nro de estudiante, los 10 números de las preguntas y nota final,
     en orden creciente de notas de todos los estudiantes evaluados.
-    */
+    ---*/
+
     int i,c;
     printf("\n\nUsted ha finalizado el programa.");
     FILE *correcciones;
