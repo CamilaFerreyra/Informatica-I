@@ -122,7 +122,7 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
             examinados[i].nota_final=0.0;
     /// si nota_final == 0.0, fue creado el examen para ese alumno.
             i++;
-    
+
         }else{
             printf("\n\n%s no se encuentra inscripto en esta comision.", mail);
         }
@@ -148,15 +148,15 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
     }
 }
 int verificar_correccion(struct examinado examinados[80], int total_examenes){
-    /*--- FUNCION, si todos los examenes fueron corregidos, 
-    devuelve 1, sino, devuelve 0.  ---*/ 
+    /*--- FUNCION, si todos los examenes fueron corregidos,
+    devuelve 1, sino, devuelve 0.  ---*/
     int respuesta=0, i;
     for(i=0;i<total_examenes;i++){
         if(examinados[i].nota_final!=0.0)
             respuesta++;
         if(respuesta==total_examenes)
             respuesta=1;
-        else   
+        else
             respuesta=0;
     }
     return respuesta;
@@ -208,9 +208,9 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
     if(verificar_correccion(examinados,*total_examenes)==1)
         mostrar_notas(examinados, *corregidos);
 }
-void intercambio(struct examinado examinados[80], int a, int b){
+void intercambiar(struct examinado examinados[80], int a, int b){
     /*--- SUBRUTINA, dada una estructura del tipo examinado,
-    intercmbia el elemento ubicado en la posicion "a" 
+    intercmbia el elemento ubicado en la posicion "a"
     por el elemento ubicado en la posicion "b" ---*/
     struct examinado aux;
     int i;
@@ -227,7 +227,7 @@ void intercambio(struct examinado examinados[80], int a, int b){
     for(i=0;i<10;i++){
         examinados[a].examen[i]=examinados[b].examen[i];
     }
-    examinados[a].nota_final,examinados[b].nota_final;
+    examinados[a].nota_final=examinados[b].nota_final;
     ///b<-aux
     examinados[b].numero=aux.numero;
     strcpy(examinados[b].mail,aux.mail);
@@ -236,10 +236,23 @@ void intercambio(struct examinado examinados[80], int a, int b){
     }
     examinados[b].nota_final=aux.nota_final;
 }
-void ordenar_creciente(struct examinado examinados[80], int *examenes_corregidos){
+void ordenar_creciente(struct examinado examinados[80], int examenes_corregidos){
     /* --- SUBRUTINA, ordena a los alumnos examinados, segun su calificacion,
-    de menor a mayor. Algoritmo: bubble sort (mejorado) ---*/
-
+    de menor a mayor. Algoritmo: bubble sort ---*/
+    /*for(e = 0; e < TAM; e++)
+ for(i = 0; i < TAM-1-e; i++)
+ if(CB[i] > CB[i+1]) {
+ auxiliar = CB[i+1];
+ CB[i+1] = CB[i];
+ CB[i] = auxiliar;
+ } */
+    int i,c;
+    for(c=0;c<examenes_corregidos;c++){
+        for(i=0;i<examenes_corregidos-1-c;i++){
+            if(examinados[i].nota_final>examinados[i+1].nota_final)
+                intercambiar(examinados,i,i+1);
+        }
+    }
 }
 void salir(struct examinado examinados[80], int *examenes_corregidos){
     /*--- SUBRUTINA, guarda en un archivo de nombre “correcciones.txt”
@@ -250,6 +263,7 @@ void salir(struct examinado examinados[80], int *examenes_corregidos){
 
     int i,c;
     printf("\n\nUsted ha finalizado el programa.");
+    ordenar_creciente(examinados,*examenes_corregidos);
     FILE *correcciones;
     correcciones= fopen("correcciones.txt", "w");
     printf("\n\nGrenerando archivo con correcciones...");
