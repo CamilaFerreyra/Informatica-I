@@ -93,7 +93,7 @@ int buscar(char mail[360], struct alumno planilla[80]){
     }
     return posicion;
 }
-void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *total_examenes){
+void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *total_examenes, int bandera_examinar){
     /*--- SUBRUTINA. lee e-mails del archivo evaluados.dat y los busca en la planilla genereada por carga.
     Si lo encuentra, genera el examen para el alumno del mail.
     si no, muestra "nombre@dominio, no se encuentra inscripto en esta comisión."
@@ -101,8 +101,8 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
 
     //VER Se debe mostrar en la pantalla el total de exámenes generados.
 
-
-    char mail[360];
+    if(bandera_examinar==1){
+        char mail[360];
     int posicion,i=0;
     *total_examenes=0;
     FILE *evaluados;
@@ -113,7 +113,7 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
     ///si "buscar" encuentra el mail, devuelve la posicion de "alumnos" donde lo encontro, sino devuelve -1.
         if(posicion!=-1){
             (*total_examenes)++;
-            printf("\n\nQuiero generar un examen para el mail %s...", mail);
+            printf("\n\nSe esta generando un examen para el mail %s...", mail);
     ///guardo datos de alumnos con examenes en examinados:
             examinados[i].numero=alumnos[posicion].numero;
             strcpy(examinados[i].mail,mail);
@@ -129,6 +129,10 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
         fscanf(evaluados,"%s",&mail);
     }
     fclose(evaluados);
+    }else{
+        printf("\nNo es posible crear examenes para los alumnos. \nVerifique que todos los examenes anteriores hayan sido corregidos");
+    }
+
 }
 void mostrar_notas(struct examinado examinados[80], int corregidos){
     /*--- SUBRUTINA, recibe la lista de alumnos examinados y la cantidad de examenes corregidos.
@@ -150,18 +154,18 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
 int verificar_correccion(struct examinado examinados[80], int total_examenes){
     /*--- FUNCION, si todos los examenes fueron corregidos,
     devuelve 1, sino, devuelve 0.  ---*/
-    int respuesta=0, i;
+    int contador=0,respuesta, i;
     for(i=0;i<total_examenes;i++){
         if(examinados[i].nota_final!=0.0)
-            respuesta++;
-        if(respuesta==total_examenes)
+            contador++;
+        if(contador==total_examenes)
             respuesta=1;
         else
             respuesta=0;
     }
     return respuesta;
 }
-void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos){
+void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos, int *bandera_examinar){
     /*--- SUBRUTINA, recibe la estructura creada por la opción E).
     Recorre los elementos de la estructura y
     muestra el nro del estudiante (aún no corregido)
@@ -196,6 +200,8 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
                 printf("\n\nIngrese la nota final: ");
                 scanf("%f", &examinados[i].nota_final);
                 *corregidos= *corregidos +1;
+                *bandera_examinar=0;
+        ///bloqueo la posibilidad de examinar nuevamente. Hasta que todos hayan sido corregidos.
             }else{
                 printf("El alumno numero %i, ya ha sido corregido", examinados[i].numero);
             }
@@ -204,9 +210,13 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
     }else{
         printf("\n\nADVERTENCIA: no se han generado los examenes!!");
     }
-///Si todos los examenes fueron corregidos, se enlista el examen, nro de alumno y nota.
-    if(verificar_correccion(examinados,*total_examenes)==1)
+    ///Si todos los examenes fueron corregidos, se enlista el examen, nro de alumno y nota.
+    if(verificar_correccion(examinados,*total_examenes)==1){
         mostrar_notas(examinados, *corregidos);
+        *bandera_examinar=1;
+    ///habilito la posibilidad de examinar nuevamente.
+    }
+
 }
 void intercambiar(struct examinado examinados[80], int a, int b){
     /*--- SUBRUTINA, dada una estructura del tipo examinado,
@@ -284,8 +294,9 @@ main(){
     struct alumno alumnos[80];
     struct examinado examinados[80];
     char opcion;
-    int inscriptos, total_examenes, alumnos_examinados;
-    //esta instrucción sirve de semilla para el aleatorio.
+    int bandera_examinar=1,inscriptos, total_examenes, alumnos_examinados;
+    ///si bandera_examinar == 1, puedo crear examenes.
+    ///esta instrucción sirve para plantar la semilla para el rand().
     srand(time(NULL));
     cargar(alumnos, &inscriptos);
     printf("\nCantidad de alumnos inscriptos en la comision: %i", inscriptos);
@@ -294,11 +305,11 @@ main(){
         switch(opcion)
         {
             case 'E':
-                examinar(alumnos, examinados, &total_examenes);
+                examinar(alumnos, examinados, &total_examenes, bandera_examinar);
                 printf("\n\nSe acaban de generar %i examenes.", total_examenes);
                 break;
             case 'C':
-                corregir(examinados, &total_examenes, &alumnos_examinados);
+                corregir(examinados, &total_examenes, &alumnos_examinados, &bandera_examinar);
                 printf("\n\nCantidad de examenes corregidos: %i", alumnos_examinados);
                 break;
             case 'S':
