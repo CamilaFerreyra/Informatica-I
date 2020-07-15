@@ -6,11 +6,11 @@
 
 struct alumno{
     int numero;
-    char mail[360];
+    char mail[320];
 };
 struct examinado{
     int numero;
-    char mail[360];
+    char mail[320];
     int examen[10];
     float nota_final;
 };
@@ -40,7 +40,7 @@ void cargar(struct alumno planilla[80], int *inscriptos){
     y el segundo la dirección de correo electrónico. ---*/
 
     int i=0,id;
-    char mail[360];
+    char mail[320];
 
     FILE *estudiantes;
     estudiantes = fopen("estudiantes.dat","r");
@@ -82,7 +82,7 @@ char menu(){
     }
     return opcion;
 }
-int buscar(char mail[360], struct alumno planilla[80]){
+int buscar(char mail[320], struct alumno planilla[80]){
     /*--- FUNCION. si encuentra el mail en la planilla,
     devuelve la posicion de la planilla donde lo encontro,
     sino devuelve -1. --- */
@@ -102,7 +102,7 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
     //VER Se debe mostrar en la pantalla el total de exámenes generados.
 
     if(bandera_examinar==1){
-        char mail[360];
+        char mail[320];
     int posicion,i=0;
     *total_examenes=0;
     FILE *evaluados;
@@ -172,21 +172,14 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
     muestra el listado de números de preguntas asignadas.
     Permite que el docente ingrese la nota final.
 
-    Luego se retorna al menú principal.
-
-    observaciones:
-    Si no se generaron los exámenes se debe advertir con un mensaje de
-    esta situación y volver a mostrar el menú principal.
-    La nota final pertenece al rango [1.0; 10:0]
-    Un examen aún no corregido debe tener 0.0 como nota.
-
-     VER Si se corrigieron todos los exámenes, mostrar la lista completa de
+    Si se corrigieron todos los exámenes, mostrar la lista completa de
     todos los exámenes corregidos indicando el nro de estudiante y la nota, y a continuación
     habilitar nuevamente la opción E) EXAMINAR.
     */
-    ///Si el examen fue creado y no fue corregido, nota final == 0.0
+    
     int i,c;
     *corregidos=0;
+    ///Si el examen fue creado y no fue corregido, nota final == 0.0
     if(examinados[0].nota_final==0.0){
         for(i=0;i<*total_examenes;i++){
             if(examinados[i].nota_final==0.0){
@@ -201,7 +194,7 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
                 scanf("%f", &examinados[i].nota_final);
                 *corregidos= *corregidos +1;
                 *bandera_examinar=0;
-        ///bloqueo la posibilidad de examinar nuevamente. Hasta que todos hayan sido corregidos.
+        ///con bandera bloqueo la posibilidad de examinar nuevamente. Hasta que todos hayan sido corregidos.
             }else{
                 printf("El alumno numero %i, ya ha sido corregido", examinados[i].numero);
             }
@@ -249,13 +242,7 @@ void intercambiar(struct examinado examinados[80], int a, int b){
 void ordenar_creciente(struct examinado examinados[80], int examenes_corregidos){
     /* --- SUBRUTINA, ordena a los alumnos examinados, segun su calificacion,
     de menor a mayor. Algoritmo: bubble sort ---*/
-    /*for(e = 0; e < TAM; e++)
- for(i = 0; i < TAM-1-e; i++)
- if(CB[i] > CB[i+1]) {
- auxiliar = CB[i+1];
- CB[i+1] = CB[i];
- CB[i] = auxiliar;
- } */
+
     int i,c;
     for(c=0;c<examenes_corregidos;c++){
         for(i=0;i<examenes_corregidos-1-c;i++){
