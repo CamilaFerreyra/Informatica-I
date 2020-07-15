@@ -1,4 +1,3 @@
-
 #include<stdio.h>
 #include<stdlib.h>
 //#include<conio.h>
@@ -45,16 +44,15 @@ void cargar(struct alumno planilla[80], int *inscriptos){
     FILE *estudiantes;
     estudiantes = fopen("estudiantes.dat","r");
     *inscriptos=0;
-    fscanf(estudiantes,"%i%s",&id, &mail);
+    fscanf(estudiantes,"%i%s",&id, mail);
 
     while(!feof(estudiantes)){
-        printf("\n%i %s", id, mail);
-
+        //printf("\n%i %s", id, mail);
         planilla[i].numero=id;
         strcpy(planilla[i].mail,mail);
         (*inscriptos)++;
 ///IMPORTANTE parentesis.
-        fscanf(estudiantes,"%i%s", &id, &mail);
+        fscanf(estudiantes,"%i%s", &id, mail);
         i++;
     }
     fclose(estudiantes);
@@ -93,7 +91,7 @@ int buscar(char mail[320], struct alumno planilla[80]){
     }
     return posicion;
 }
-void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *total_examenes, int bandera_examinar){
+void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *total_examenes, int *bandera_examinar){
     /*--- SUBRUTINA. lee e-mails del archivo evaluados.dat y los busca en la planilla genereada por carga.
     Si lo encuentra, genera el examen para el alumno del mail.
     si no, muestra "nombre@dominio, no se encuentra inscripto en esta comisión."
@@ -101,36 +99,38 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
 
     //VER Se debe mostrar en la pantalla el total de exámenes generados.
 
-    if(bandera_examinar==1){
+    if(*bandera_examinar==1){
         char mail[320];
     int posicion,i=0;
     *total_examenes=0;
     FILE *evaluados;
     evaluados = fopen("evaluados.dat", "r");
-    fscanf(evaluados,"%s",&mail);
+    fscanf(evaluados,"%s",mail);
     while(!feof(evaluados)){
         posicion=buscar(mail,alumnos);
     ///si "buscar" encuentra el mail, devuelve la posicion de "alumnos" donde lo encontro, sino devuelve -1.
         if(posicion!=-1){
             (*total_examenes)++;
-            printf("\n\nSe esta generando un examen para el mail %s...", mail);
+            //printf("\n\nSe esta generando un examen para el mail %s...", mail);
     ///guardo datos de alumnos con examenes en examinados:
             examinados[i].numero=alumnos[posicion].numero;
             strcpy(examinados[i].mail,mail);
             aleatorio(examinados[i].examen);
-            printf("Examen generado.");
+            //printf("Examen generado.");
             examinados[i].nota_final=0.0;
     /// si nota_final == 0.0, fue creado el examen para ese alumno.
+            *bandera_examinar=0;
+    /// hay examenes pendientes de correccion, inhabilito la opcion de volver a examinar.
             i++;
 
         }else{
-            printf("\n\n%s no se encuentra inscripto en esta comision.", mail);
+            printf("\n\nEl propietario de: %s, no se encuentra inscripto en esta comision.", mail);
         }
-        fscanf(evaluados,"%s",&mail);
+        fscanf(evaluados,"%s",mail);
     }
     fclose(evaluados);
     }else{
-        printf("\nNo es posible crear examenes para los alumnos. \nVerifique que todos los examenes anteriores hayan sido corregidos");
+        printf("\nNo es posible crear examenes para los alumnos. \nVerifique que no existan examenes sin corregir");
     }
 
 }
@@ -139,21 +139,21 @@ void mostrar_notas(struct examinado examinados[80], int corregidos){
     Muestra la lista completa de examenes corregidos junto con el
     numero de alumno y la nota final del mismo. ---*/
     int i,c;
-    printf("\nListado alumnos corregidos:\n--------------------------\n");
+    printf("\nListado alumnos corregidos:\n--------------------------");
     for(i=0;i<corregidos;i++){
-        printf("\n\nAlumno numero %i:", examinados[i].numero);
-        printf("\n\nExamen:");
+        printf("\nAlumno numero %i:", examinados[i].numero);
+        printf("\nExamen:");
         for(c=0;c<10;c++){
             printf(" %i", examinados[i].examen[c]);
             if(c!=9)
             printf(",");
         }
-        printf("\n\nNota final: %.2f\n--------------------------\n",examinados[i].nota_final);
+        printf("\nNota final: %.2f\n--------------------------",examinados[i].nota_final);
     }
 }
 int verificar_correccion(struct examinado examinados[80], int total_examenes){
     /*--- FUNCION, si todos los examenes fueron corregidos,
-    devuelve 1, sino, devuelve 0.  ---*/
+    devuelve 1, sino devuelve 0.  ---*/
     int contador=0,respuesta, i;
     for(i=0;i<total_examenes;i++){
         if(examinados[i].nota_final!=0.0)
@@ -165,18 +165,13 @@ int verificar_correccion(struct examinado examinados[80], int total_examenes){
     }
     return respuesta;
 }
-void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos, int *bandera_examinar){
+void corregir(struct examinado examinados[80], int *total_examenes, int *corregidos){
     /*--- SUBRUTINA, recibe la estructura creada por la opción E).
     Recorre los elementos de la estructura y
     muestra el nro del estudiante (aún no corregido)
     muestra el listado de números de preguntas asignadas.
-    Permite que el docente ingrese la nota final.
+    Permite que el docente ingrese la nota final. ---*/
 
-    Si se corrigieron todos los exámenes, mostrar la lista completa de
-    todos los exámenes corregidos indicando el nro de estudiante y la nota, y a continuación
-    habilitar nuevamente la opción E) EXAMINAR.
-    */
-    
     int i,c;
     *corregidos=0;
     ///Si el examen fue creado y no fue corregido, nota final == 0.0
@@ -193,23 +188,14 @@ void corregir(struct examinado examinados[80], int *total_examenes, int *corregi
                 printf("\n\nIngrese la nota final: ");
                 scanf("%f", &examinados[i].nota_final);
                 *corregidos= *corregidos +1;
-                *bandera_examinar=0;
-        ///con bandera bloqueo la posibilidad de examinar nuevamente. Hasta que todos hayan sido corregidos.
             }else{
                 printf("El alumno numero %i, ya ha sido corregido", examinados[i].numero);
             }
         }
-        mostrar_notas(examinados, *corregidos);
-    }else{
+    }
+    if(*corregidos==0){
         printf("\n\nADVERTENCIA: no se han generado los examenes!!");
     }
-    ///Si todos los examenes fueron corregidos, se enlista el examen, nro de alumno y nota.
-    if(verificar_correccion(examinados,*total_examenes)==1){
-        mostrar_notas(examinados, *corregidos);
-        *bandera_examinar=1;
-    ///habilito la posibilidad de examinar nuevamente.
-    }
-
 }
 void intercambiar(struct examinado examinados[80], int a, int b){
     /*--- SUBRUTINA, dada una estructura del tipo examinado,
@@ -286,18 +272,24 @@ main(){
     ///esta instrucción sirve para plantar la semilla para el rand().
     srand(time(NULL));
     cargar(alumnos, &inscriptos);
-    printf("\nCantidad de alumnos inscriptos en la comision: %i", inscriptos);
+    //printf("\nCantidad de alumnos inscriptos en la comision: %i", inscriptos);
     while(opcion!='S'){
         opcion=menu();
-        switch(opcion)
-        {
+        switch(opcion){
             case 'E':
-                examinar(alumnos, examinados, &total_examenes, bandera_examinar);
-                printf("\n\nSe acaban de generar %i examenes.", total_examenes);
+                examinar(alumnos, examinados, &total_examenes, &bandera_examinar);
+                //printf("\nSe acaban de generar %i examenes.", total_examenes);
                 break;
             case 'C':
-                corregir(examinados, &total_examenes, &alumnos_examinados, &bandera_examinar);
-                printf("\n\nCantidad de examenes corregidos: %i", alumnos_examinados);
+                corregir(examinados, &total_examenes, &alumnos_examinados);
+                //printf("\nCantidad de examenes corregidos: %i", alumnos_examinados);
+                ///Si todos los examenes fueron corregidos, se enlista el examen, nro de alumno y nota.
+                if(verificar_correccion(examinados, total_examenes)==1){
+                    mostrar_notas(examinados, alumnos_examinados);
+                    bandera_examinar=1;
+                ///habilito la posibilidad de examinar nuevamente.
+                }
+
                 break;
             case 'S':
                 salir(examinados, &alumnos_examinados);
