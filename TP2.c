@@ -97,8 +97,6 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
     si no, muestra "nombre@dominio, no se encuentra inscripto en esta comisión."
     Se cuentan la cantidad de examenes generados. ---*/
 
-    //VER Se debe mostrar en la pantalla el total de exámenes generados.
-
     if(*bandera_examinar==1){
         char mail[320];
     int posicion,i=0;
@@ -129,6 +127,7 @@ void examinar(struct alumno alumnos[80], struct examinado examinados[80], int *t
         fscanf(evaluados,"%s",mail);
     }
     fclose(evaluados);
+    printf("\nSe acaban de generar %i examenes.", *total_examenes);
     }else{
         printf("\nNo es posible crear examenes para los alumnos. \nVerifique que no existan examenes sin corregir");
     }
