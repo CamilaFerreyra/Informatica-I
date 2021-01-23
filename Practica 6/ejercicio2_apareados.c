@@ -1,17 +1,17 @@
 #include<stdio.h>
 /* EJERCICIO 2
-Dado un arreglo V de 20 números reales que se cargan desde teclado, generar 2 nuevos
-arreglos que contengan el valor y la posición respectivamente de los elementos no nulos del
+Dado un arreglo V de 20 numeros reales que se cargan desde teclado, generar 2 nuevos
+arreglos que contengan el valor y la posicion respectivamente de los elementos no nulos del
 arreglo V. Mostrar los 2 nuevos arreglos generados.
 
-Tema: Valor y posición de elementos de un arreglo.
+Tema: Valor y posicion de elementos de un arreglo.
 
-Aplicación: Se dispone del total de ventas de 20 vendedores de un negocio.
-Los vendedores se identifican con números del 1 al 20. Puede ser que uno o más vendedores
-no hayan vendido nada, por lo cual su total de ventas será 0.
-Se debe ingresar la información ordenada por número de vendedor en un arreglo de nombre
-VENTAS, y luego generar 2 arreglos que contengan, por un lado el número del vendedor y
-por otro, el total de ventas que le corresponde, pero sólo para aquellos vendedores que
+Aplicacion: Se dispone del total de ventas de 20 vendedores de un negocio.
+Los vendedores se identifican con nï¿½meros del 1 al 20. Puede ser que uno o mï¿½s vendedores
+no hayan vendido nada, por lo cual su total de ventas serï¿½ 0.
+Se debe ingresar la informaciï¿½n ordenada por nï¿½mero de vendedor en un arreglo de nombre
+VENTAS, y luego generar 2 arreglos que contengan, por un lado el nï¿½mero del vendedor y
+por otro, el total de ventas que le corresponde, pero sï¿½lo para aquellos vendedores que
 realizaron ventas.
 */
 main(){
